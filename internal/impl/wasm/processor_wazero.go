@@ -9,6 +9,7 @@ import (
 
 	"github.com/tetratelabs/wazero"
 	"github.com/tetratelabs/wazero/api"
+	"github.com/tetratelabs/wazero/experimental/opt"
 	"github.com/tetratelabs/wazero/imports/wasi_snapshot_preview1"
 
 	"github.com/benthosdev/benthos/v4/public/service"
@@ -99,7 +100,7 @@ func newWazeroAllocProcessor(functionName string, wasmBinary []byte, mgr *servic
 func (p *wazeroAllocProcessor) newModule() (mod *moduleRunner, err error) {
 	ctx := context.Background()
 
-	r := wazero.NewRuntime(ctx)
+	r := wazero.NewRuntimeWithConfig(ctx, opt.NewRuntimeConfigOptimizingCompiler())
 	mod = &moduleRunner{
 		log:     p.log,
 		runtime: r,
